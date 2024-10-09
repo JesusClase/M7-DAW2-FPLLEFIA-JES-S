@@ -1,5 +1,5 @@
-
 <?php
+session_start();
 
 $frutas = [
     ["fruta" => "Manzana", "tf" => false, "foto" => "https://static.vecteezy.com/system/resources/previews/023/858/853/non_2x/ai-genrative-green-apple-free-png.png"],
@@ -7,7 +7,18 @@ $frutas = [
     ["fruta" => "Naranja", "tf" => false, "foto" => "https://static.vecteezy.com/system/resources/thumbnails/040/750/078/small_2x/ai-generated-orange-orange-isolated-refreshing-citrus-fruit-orange-slices-orange-top-view-orange-flat-lay-png.png"],
     ["fruta" => "Fresa", "tf" => false, "foto" => "https://static.vecteezy.com/system/resources/previews/024/596/055/non_2x/strawberry-strawberry-with-transparent-background-transparent-strawberry-ai-generated-free-png.png"],
     ["fruta" => "Kiwi", "tf" => false, "foto" => "https://static.vecteezy.com/system/resources/previews/008/532/603/non_2x/kiwi-fruit-cutout-file-png.png"],
-]
+];
+
+if (isset($_GET['fruta'])) {
+    $nombreFruta = $_GET['fruta'];
+    foreach ($frutas as &$fruta) {
+        if ($fruta['fruta'] == $nombreFruta) {
+            $fruta['tf'] = true;
+            $_SESSION['fruta_seleccionada'] = $fruta;
+        }
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -31,45 +42,36 @@ $frutas = [
             </thead>
             <tbody>
                 <?php
-
-                foreach ($frutas as $fruta){
-                    echo'
-                    <tr class="table-danger">;
-                    <td>' .$fruta['fruta'] . '</td>';
-                    
-                    if($fruta['tf']==false){
-                        echo '<td>No seleccionada</td>';
-                        $fruta['tf'] = true;
-                        if(isset($_GET['tf']) == true){
-                            echo '<td> ✔️ Fruta seleccionada</td>';
-                        }
-                    }
-                    echo'
-                    <td><a class="btn btn-primary" href="?fruta='.$fruta['fruta'] .'">Seleccionar</a></td>
-                </tr>';
+                foreach ($frutas as $fruta) {
+                    $fondo = $fruta['tf'] ? 'table-success' : 'table-danger'; 
+                    echo '<tr class="' . $fondo . '">';
+                    echo '<td>' . $fruta['fruta'] . '</td>';
+                    echo '<td>' . ($fruta['tf'] ? '✔️Seleccionada' : '✖ No seleccionada') . '</td>';
+                    echo '<td><a class="btn btn-primary" href="?fruta=' . $fruta['fruta'] . '">Seleccionar</a></td>';
+                    echo '</tr>';
                 }
-
-                /*if (isset($_GET['fruta'])){
-                    
-                    echo'
-                    <tr class="table-danger">;
-                    <td>' .$fruta['fruta'] . '</td>
-                    <td>✔️Fruta seleccionada</td>
-                    <td><a class="btn btn-primary" href="?fruta='.$fruta['fruta'] .'">Seleccionar</a></td>
-                </tr>';
-
-                }*/
                 ?>
             </tbody>
         </table>
 
-        <!-- Mostrar tarjeta de la fruta seleccionada (actualmente estatica, siempre hay una manzana) -->
+        <!-- Mostrar tarjeta de la fruta seleccionada -->
         <div class="card mt-4 w-25 shadow-lg">
-            <img src="https://static.vecteezy.com/system/resources/previews/023/858/853/non_2x/ai-genrative-green-apple-free-png.png" class="card-img-top img-fluid" alt="Manzana">
-            <div class="card-body bg-warning">
-                <h5 class="card-title"></h5>
-                <p class="card-text">¡Esta es tu fruta favorita!</p>
-            </div>
+            <?php
+            if (isset($_SESSION['fruta_seleccionada'])) {
+                $frutaSeleccionada = $_SESSION['fruta_seleccionada'];
+                echo '<img src="' . $frutaSeleccionada['foto'] . '" class="card-img-top img-fluid" alt="' . $frutaSeleccionada['fruta'] . '">';
+                echo '<div class="card-body bg-warning">';
+                echo '<h5 class="card-title">' . $frutaSeleccionada['fruta'] . '</h5>';
+                echo '<p class="card-text">¡Esta es tu fruta favorita!</p>';
+                echo '</div>';
+            } else {
+                echo '<img src="https://static.vecteezy.com/system/resources/previews/023/858/853/non_2x/ai-genrative-green-apple-free-png.png" class="card-img-top img-fluid" alt="Fruta no seleccionada">';
+                echo '<div class="card-body bg-warning">';
+                echo '<h5 class="card-title">No has seleccionado ninguna fruta</h5>';
+                echo '<p class="card-text">¡Selecciona una fruta para verla aquí!</p>';
+                echo '</div>';
+            }
+            ?>
         </div>
 
     </div>
@@ -80,5 +82,4 @@ $frutas = [
 </html>
 
 
-<!-- aqui tienes el emoji de SELECCIONADA ✔️ para copiarlo y usarlo en la práctica -->
 
