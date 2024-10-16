@@ -33,6 +33,10 @@ echo trim($cadena2);
 //obtiene una parte de una cadena
 echo substr($cadena2, 3, 3);
 
+//implode
+
+//explode
+
 
 
 ?>
