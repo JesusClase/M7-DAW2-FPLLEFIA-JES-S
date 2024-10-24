@@ -27,10 +27,16 @@ $limite = 9;
 
 function generarResumen($texto, $limite){
 
-    return 
+    return ;
 
 }
 
 
+// Ejercicio 4
 
+/*Conversión de temperaturas
+Crea una función convertirTemperatura($temperatura, $escala)
+que reciba una temperatura y la escala a la que debe convertir (“C”
+para Celsius o “F” para Fahrenheit) y devuelva el resultado convertido.
+*/
 ?>
